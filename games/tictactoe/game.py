@@ -13,6 +13,8 @@ board   = [0,0,0,0,0,0,0,0,0]
 #   1 = Winner found
 #   2 = Tie
 def endOfGameCheck():
+	# Tie
+	if (board.count(0) == 0): return 2
 	# Horizontal	
 	for i in range(0,7,3):
 		if ((board[0+i]!=0) & (board[0+i] == board[1+i]) & (board[1+i] == board[2+i])): return 1
@@ -22,6 +24,7 @@ def endOfGameCheck():
 	# Diagonal
 	if ((board[0]!=0) & (board[0] == board[4] ) & (board[4] == board[8])): return 1
 	if ((board[2]!=0) & (board[2] == board[4] ) & (board[4] == board[6])): return 1
+		
 	return 0
 
 # Validate and process a player's move
@@ -62,9 +65,9 @@ def main(argv):
 		endstate = endOfGameCheck()
 
 	# Game is over, print the results...
-	if   endstate == 1: print("%dW") % (player)
-	elif endstate == 2: print("0")
-	elif endstate == 3: print("%dF") % (player)
+	if   endstate == 1: print("%dW") % (player)	# Somebody won
+	elif endstate == 2: print("0")			# Tie
+	elif endstate == 3: print("%dF") % (player)	# Tomfoolery
 	else: print("Somebody crossed the beams...Time to panic!")
 
 if __name__ == "__main__": 
