@@ -12,17 +12,16 @@ board   = [0,0,0,0,0,0,0,0,0]
 #   0 = Game still playing
 #   1 = Winner found
 #   2 = Tie
-#   3 = FOUL!
 def endOfGameCheck():
 	# Horizontal	
 	for i in range(0,7,3):
-		if ((board[0+i]!=0) & ( board[0+i] == board[1+i] ) & (board[1+i] == board[2+i])): return 1
+		if ((board[0+i]!=0) & (board[0+i] == board[1+i]) & (board[1+i] == board[2+i])): return 1
 	# Vertical
 	for i in range(0,3):
-		if ((board[0+i]!=0) & ( board[0+i] == board[3+i] ) & (board[3+i] == board[6+i])): return 1
+		if ((board[0+i]!=0) & (board[0+i] == board[3+i]) & (board[3+i] == board[6+i])): return 1
 	# Diagonal
-	if ((board[0]!=0) & ( board[0] == board[4] ) & (board[4] == board[8])): return 1
-	if ((board[2]!=0) & ( board[2] == board[4] ) & (board[4] == board[6])): return 1
+	if ((board[0]!=0) & (board[0] == board[4] ) & (board[4] == board[8])): return 1
+	if ((board[2]!=0) & (board[2] == board[4] ) & (board[4] == board[6])): return 1
 	return 0
 
 # Validate and process a player's move
