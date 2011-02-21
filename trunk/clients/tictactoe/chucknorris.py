@@ -81,9 +81,7 @@ def chooseMove(board):
 	if board[4] == 0: return 4
 
 	# No forced move, so just pick a good one	
-	move = rateBoard(board)
-
-	return move
+	return rateBoard(board)
 
 # Main game loop
 def main():
@@ -104,7 +102,6 @@ def main():
 
 		# Choose a new random location and issue the move
 		print chooseMove(board)
-
 
 if __name__ == "__main__": 
 	main()
