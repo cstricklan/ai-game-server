@@ -8,7 +8,6 @@ random.seed()
 state = ['-']*9 
 
 while 1:
-		
 	# Read message from the game server
 	line = stdin.readline()
 	line.rstrip()
@@ -23,6 +22,7 @@ while 1:
 	expr = re.match(r"GAMESTATE: ([-XO]{9})", line)
 	if expr:
 		#print "New Game State: %s" % expr.group(1)
+		state = expr.group(1)
 		continue
 
 	# Message: Move Request
@@ -31,7 +31,7 @@ while 1:
 		while(1):
 			move = random.randint(0,8)
 			if state[move] == '-' : break
-		print "%d\n" % move
+		print "%d" % move
 		stdout.flush()
 		continue
 
