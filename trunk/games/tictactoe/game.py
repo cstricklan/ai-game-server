@@ -82,7 +82,6 @@ players  = [player0,player1]
 turn	 = 0
 endstate = 0
 while ( not endstate ):
-
 	# Request a move from the active player
 	if DEBUG: print "Requesting move from player%d..." % turn
 	players[turn].stdin.write("REQUEST_MOVE\n")
@@ -94,24 +93,30 @@ while ( not endstate ):
 	if DEBUG: print "Got reply form player%d: %s" % (turn,line)
 	expr = re.match(r"^(\d)$", line)
 	if not expr:	# is a single digit
-		print "Player%d move illegally! forfeits!" % turn
+		print "malformed reply from player%d (%s)" % (turn,line)
 		endstate = 3
 		continue
 
 	# Process the move	
 	move = int(expr.group(1))
 	if DEBUG: print "Player%d chooses to move at %d" % (turn,move)
-	if (processMove(tokens[turn],move) == 1): endstate = 3
-	endstate = endOfGameCheck()
-	if endstate: continue
+	if (processMove(tokens[turn],move) == 1):
+		if DEBUG: print "player%d moved illegally! forfeits!" % turn
+		endstate = 3
+		continue
 
 	# Draw the game board for logging
 	draw_nice_state()
+
+    # game over?
+	endstate = endOfGameCheck()
+	if endstate: continue
 
 	# Update both players with new game state
 	state_xmit = 'GAMESTATE: '
 	for i in range(9):
 		state_xmit += board[i]
+	state_xmit += "\n"
 	print "Broadcasting: ", state_xmit
 	player0.stdin.write(state_xmit)
 	player0.stdin.flush()
@@ -121,9 +126,13 @@ while ( not endstate ):
 	# Change active player
 	turn = (turn + 1) % 2
 
+# close pipes, subprocesses
+player0.kill()
+player1.kill()
+
 # Game is over, print the results...
-if   endstate == 1: print("OUTCOME:%dW") % (turn)	# Somebody won
-elif endstate == 2: print("OUTCOME:0")			# Tie
-elif endstate == 3: print("OUTCOME:%dF") % (turn)	# Tomfoolery
+if   endstate == 1: print("OUTCOME: %dW") % (turn)	# Somebody won
+elif endstate == 2: print("OUTCOME: 0")			# Tie
+elif endstate == 3: print("OUTCOME: %dF") % (turn)	# Tomfoolery
 else: print("Somebody crossed the beams...Time to panic!")
 
