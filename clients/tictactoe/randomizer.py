@@ -1,28 +1,41 @@
 #!/usr/bin/python
 
-import sys
+from sys import stdin, stdout
+import re
 import random
 
-# Main game loop
-def main():
+random.seed()
+state = ['-']*9 
 
-	random.seed()
-
-	while (1):
+while 1:
 		
-		# Read board, exit if game is over
-		board = input()
-		try: 
-			if (len(board) != 9): break
-		except TypeError: 
-			break
+	# Read message from the game server
+	line = stdin.readline()
+	line.rstrip()
 
-		# Choose a new random location and issue the move
-		while (1):
+	# Message: assign player
+	expr = re.match(r"ASSIGN_PLAYER: (\d+)", line)
+	if expr:
+		#print "I am player %d!\n" % player
+		continue
+
+	# Message: game state update
+	expr = re.match(r"GAMESTATE: ([-XO]{9})", line)
+	if expr:
+		#print "New Game State: %s" % expr.group(1)
+		continue
+
+	# Message: Move Request
+	expr = re.match(r"REQUEST_MOVE", line)
+	if expr:
+		while(1):
 			move = random.randint(0,8)
-			if board[move] == 0 : break
-		print move
+			if state[move] == '-' : break
+		print "%d\n" % move
+		stdout.flush()
+		continue
+
+	# Unknown Message
+	print "Unknown message from server:", line
 
 
-if __name__ == "__main__": 
-	main()
