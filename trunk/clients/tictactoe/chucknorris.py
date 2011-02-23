@@ -44,6 +44,7 @@ def checkSpecial(board):
         if (board == "-X-XO----"): return 0
         if (board == "----OX-X-"): return 8
         if (board == "---XO--X-"): return 6
+        if (board == "O---X---X"): return 2
     return 0
     
 # Determine the value of taking the specified square
