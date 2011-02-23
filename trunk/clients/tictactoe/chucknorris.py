@@ -46,7 +46,7 @@ def checkSpecial(board):
         if (board == "----OX-X-"): return 8
         if (board == "---XO--X-"): return 6
         if (board == "O---X---X"): return 2
-    return 0
+    return -1
     
 # Determine the value of taking the specified square
 def rateSquare(pos,board):
@@ -99,7 +99,7 @@ def chooseMove(board):
 
     # Check for "special" cases...
     cheat = checkSpecial(board)
-    if cheat != 0: return cheat
+    if cheat >= 0: return cheat
 
     # No forced move, so just pick a good one   
     return rateBoard(board)
