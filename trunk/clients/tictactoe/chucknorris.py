@@ -11,17 +11,17 @@ DEBUG = 0
 player = 0
 tokens = ['X','O']
 
+# Define all winning vectors
+winVec = [ [0,1,2],[3,4,5],[6,7,8], # Horizontal
+           [0,3,6],[1,4,7],[2,5,8], # Vertical
+           [0,4,8],[2,4,6] ]        # Diagonal
+
 # Determine if a player is one move from victory
 # Returns   (player,winning_move)
 #       (0,0)   if nobody is about to win
 #       (1,x)   if next move is a win for us
 #       (2,x)   if next move is a win for them 
 def nextMoveWin(board):
-    # Define all winning vectors
-    winVec = [ [0,1,2],[3,4,5],[6,7,8], # Horizontal
-               [0,3,6],[1,4,7],[2,5,8], # Vertical
-               [0,4,8],[2,4,6] ]        # Diagonal
-
     # Be sure to check for all possible good guy victories before checking losses
     for x in winVec:
         y = (board[x[0]]), (board[x[1]]), (board[x[2]])
@@ -68,7 +68,20 @@ def rateBoard(board):
     for i in range(0,9):
         vec[i] = rateSquare(i,board)
     if DEBUG: print "Score Vector: ", vec
-    return vec.index(max(vec))
+
+    # Stay offensive is we are player 0, defensive if player 1
+    if (player == 0): 
+        return vec.index(max(vec))
+    if (player == 1): 
+        if DEBUG: print "vec: ",vec
+        for i in range(9): 
+            if vec[i] == -9: vec[i] = 9
+        if min(vec) < 0: 
+            return vec.index(min(vec))
+        else:
+            for i in range(9): 
+                if vec[i] == 9: vec[i] = -9
+            return vec.index(max(vec))
 
 # Select and return the best available move
 def chooseMove(board):
