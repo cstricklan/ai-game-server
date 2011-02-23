@@ -35,6 +35,17 @@ def nextMoveWin(board):
     # Nothing exciting happening...
     return (0,0) 
 
+# Not pretty, but I can't think of an algorithmic way to get around these special cases.
+# Kinda feels like cheating, but Chuck Norris doesn't cheat death...he wins fair and square.
+def checkSpecial(board):
+    if player == 1:
+        if (board == "X---O---X") or (board == "--X-O-X--"): return 1
+        if (board == "-X--OX---"): return 2
+        if (board == "-X-XO----"): return 0
+        if (board == "----OX-X-"): return 8
+        if (board == "---XO--X-"): return 6
+    return 0
+    
 # Determine the value of taking the specified square
 def rateSquare(pos,board):
     
@@ -70,18 +81,7 @@ def rateBoard(board):
     if DEBUG: print "Score Vector: ", vec
 
     # Stay offensive is we are player 0, defensive if player 1
-    if (player == 0): 
-        return vec.index(max(vec))
-    if (player == 1): 
-        if DEBUG: print "vec: ",vec
-        for i in range(9): 
-            if vec[i] == -9: vec[i] = 9
-        if min(vec) < 0: 
-            return vec.index(min(vec))
-        else:
-            for i in range(9): 
-                if vec[i] == 9: vec[i] = -9
-            return vec.index(max(vec))
+    return vec.index(max(vec))
 
 # Select and return the best available move
 def chooseMove(board):
@@ -94,6 +94,10 @@ def chooseMove(board):
     
     # Always choose the middle if it's available...
     if board[4] == '-': return 4
+
+    # Check for "special" cases...
+    cheat = checkSpecial(board)
+    if cheat != 0: return cheat
 
     # No forced move, so just pick a good one   
     return rateBoard(board)
