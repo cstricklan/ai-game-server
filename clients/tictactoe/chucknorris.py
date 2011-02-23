@@ -38,9 +38,10 @@ def nextMoveWin(board):
 # Not pretty, but I can't think of an algorithmic way to get around these special cases.
 # Kinda feels like cheating, but Chuck Norris doesn't cheat death...he wins fair and square.
 def checkSpecial(board):
+
     if player == 1:
         if (board == "X---O---X") or (board == "--X-O-X--"): return 1
-        if (board == "-X--OX---"): return 1
+        if (board == "-X--OX---"): return 2
         if (board == "-X-XO----"): return 0
         if (board == "----OX-X-"): return 8
         if (board == "---XO--X-"): return 6
