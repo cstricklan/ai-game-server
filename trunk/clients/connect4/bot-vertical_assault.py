@@ -51,36 +51,38 @@ while 1:
         # parse state characters into 2d array, but arrange based on columns instead of rows
         for i in range(8):
             for j in range(8):
-                board[i][j] = state[i*8+j]
+                board[i][j] = state[i+8*j]
 
         # find the column with the longest sequence of our tokens at the top
         scores = [-25]*8
         for i in range(8):
 
             # First, make sure it's legal to move here...
-            if not ("-" in board[i]): scores[i] -= 100; continue
+            if not ("-" in board[i]): scores[i] = -100; continue
 
             # If our token is on top...
-            if not(tokens[player] in board[i]): 
-                scores[i] = 0; continue
+            if not(tokens[player] in board[i]): continue
             p1Index = board[i].index(tokens[player])
-          
             p2Index = 100 
             if tokens[(player+1)%2] in board[i]: 
                 p2Index = board[i].index(tokens[(player+1)%2])
-
-            if p1Index <= p2Index:
+            if p1Index >= p2Index:
 
                 # Count the length of the sequence and increment the score...
+                scores[i] = 0
                 for j in range(board[i].index(tokens[player]),8):
                     if board[i][j] == tokens[player]: scores[i] += 1
                     else: break
 
                 # If we are about to win, DO IT!
-                if scores[i] + board[i].index(tokens[player]) >= 4: scores[i] += 50
+                if (scores[i] == 3) and ("-" in board[i]): scores[i] = 50
 
                 # If there is not enough room to finish, abandon ship
-                if scores[i] + board[i].index(tokens[player]) < 4: scores[i] -= 50
+                if scores[i] + board[i].count("-") < 4: scores[i] = -50
+
+            # print board[i]
+
+        #print scores
 
         # Determine a move based on the best score
         move = scores.index(max(scores))
