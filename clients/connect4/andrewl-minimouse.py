@@ -125,6 +125,10 @@ def calculate_move(state):
     # score all possible moves using minimax
     state_to_score = {}
     for candidate_state in state_possibility(state, g_player_id_us):
+        # immediate wins skip further processing (don't appear cocky :P)
+        if state_test_win(candidate_state, g_player_id_us):
+            state_to_score = { ''.join(candidate_state) : score }
+            break
         score = minimax(candidate_state, 1, g_max_depth)
         state_to_score[''.join(candidate_state)] = score
 
@@ -133,10 +137,6 @@ def calculate_move(state):
     for key in state_to_score.keys():
         if state_to_score[key] < record_score:
             del state_to_score[key]
-
-    # note here that a winning move is scored equally to a move that definitely leads to a win
-    # rather than make the distinction, let's leave this in so that randomly it will look like
-    # the bot is "toying" with the opponent :P
 
     # pick a random state among the best
     record_states = state_to_score.keys()
