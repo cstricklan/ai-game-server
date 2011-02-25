@@ -36,7 +36,7 @@ if len(argv)==3:
 
     # init player1
     if argv[2] == 'human':
-        player1 = dummy_pipe
+        player1 = dummy_pipe()
     elif os.path.exists(argv[2]):
         player1 = subprocess.Popen([argv[2]], stdout=subprocess.PIPE, stdin=subprocess.PIPE);
     else:
